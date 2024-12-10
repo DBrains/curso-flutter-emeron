@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:curso/src/widgets/todo_item.widget.dart';
+import 'package:curso/src/widgets/widgets.dart';
 import 'package:curso/src/entities/todo_item.entity.dart';
 
 class HomeView extends StatefulWidget {
@@ -26,60 +26,14 @@ class _MyHomePageState extends State<HomeView> {
 
   void _incrementCounter() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            insetPadding: const EdgeInsets.all(16),
-            child: Form(
-              key: GlobalKey<FormState>(),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: const Text(
-                        "Inserir Tarefa",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    TextInputWidget(
-                      label: "Título",
-                      controller: titleController,
-                    ),
-                    TextInputWidget(
-                      label: "Descrição",
-                      maxLines: 10,
-                      controller: descriptionController,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-    // setState(
-    //   () {
-    //     _counter++;
-    //     task.add(
-    //       TodoItemEntity(
-    //         title: "Título $_counter",
-    //         description: "Descrição $_counter",
-    //       ),
-    //     );
-    //   },
-    // );
+      context: context,
+      builder: (context) {
+        return InputTaskDialogWidget(
+          titleController: titleController,
+          descriptionController: descriptionController,
+        );
+      },
+    );
   }
 
   void _decrementCounter() {
@@ -141,44 +95,6 @@ class _MyHomePageState extends State<HomeView> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class TextInputWidget extends StatelessWidget {
-  final String label;
-  final int? maxLines;
-  TextEditingController controller = TextEditingController();
-
-  TextInputWidget({
-    super.key,
-    this.maxLines,
-    required this.label,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(
-            vertical: 8,
-            horizontal: 4,
-          ),
-          child: Text(label),
-        ),
-        TextField(
-          maxLines: maxLines,
-          controller: controller,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
