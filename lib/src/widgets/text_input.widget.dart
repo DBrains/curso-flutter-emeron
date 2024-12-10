@@ -27,6 +27,7 @@ class TextInputWidget extends StatelessWidget {
         TextField(
           maxLines: maxLines,
           controller: controller,
+          onChanged: (value) => controller.text = value,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),

@@ -12,14 +12,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomeView> {
-  int _counter = 1;
-
-  List<TodoItemEntity> task = [
-    TodoItemEntity(
-      title: "Minha tarefa",
-      description: "Varrer a casa antes da esposa chegar",
-    ),
-  ];
+  List<TodoItemEntity> task = [];
 
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -28,18 +21,94 @@ class _MyHomePageState extends State<HomeView> {
     showDialog(
       context: context,
       builder: (context) {
-        return InputTaskDialogWidget(
-          titleController: titleController,
-          descriptionController: descriptionController,
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          insetPadding: const EdgeInsets.all(16),
+          child: Form(
+            key: GlobalKey<FormState>(),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const DialogTitleWidget(
+                    title: "Inserir Tarefa",
+                  ),
+                  TextInputWidget(
+                    label: "Título",
+                    controller: titleController,
+                  ),
+                  TextInputWidget(
+                    label: "Descrição",
+                    maxLines: 10,
+                    controller: descriptionController,
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text(
+                          'Cancelar',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () {
+                          setState(
+                            () => task.add(
+                              TodoItemEntity(
+                                title: titleController.text,
+                                description: descriptionController.text,
+                              ),
+                            ),
+                          );
+                          titleController.clear();
+                          descriptionController.clear();
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: const WidgetStatePropertyAll(Colors.blue),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          side: const WidgetStatePropertyAll(BorderSide.none),
+                        ),
+                        child: const Text(
+                          'Criar tarefa',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
         );
       },
     );
   }
 
   void _decrementCounter() {
-    setState(() {
-      _counter--;
-    });
+    setState(() {});
   }
 
   @override
@@ -57,39 +126,44 @@ class _MyHomePageState extends State<HomeView> {
       ),
       body: Center(
         child: ListView.builder(
-          itemCount: _counter,
+          itemCount: task.length,
           itemBuilder: (context, index) {
-            return TodoItemWidget(
-              title: task[index].title,
-              description: task[index].description,
-            );
+            return task.isNotEmpty
+                ? TodoItemWidget(
+                    title: task[index].title,
+                    description: task[index].description,
+                  )
+                : Container();
           },
         ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FloatingActionButton(
-            backgroundColor: Colors.blueAccent.shade200,
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          Visibility(
-            visible: _counter > 0,
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
             child: FloatingActionButton(
               backgroundColor: Colors.blueAccent.shade200,
-              onPressed: _decrementCounter,
-              tooltip: 'Decrement',
+              onPressed: _incrementCounter,
+              tooltip: 'Increment',
               child: const Icon(
-                Icons.remove,
+                Icons.add,
                 color: Colors.white,
+              ),
+            ),
+          ),
+          Visibility(
+            visible: task.isNotEmpty,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              child: FloatingActionButton(
+                backgroundColor: Colors.blueAccent.shade200,
+                onPressed: _decrementCounter,
+                tooltip: 'Decrement',
+                child: const Icon(
+                  Icons.remove,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
