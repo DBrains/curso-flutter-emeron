@@ -108,7 +108,9 @@ class _MyHomePageState extends State<HomeView> {
   }
 
   void _decrementCounter() {
-    setState(() {});
+    setState(() {
+      task.remove(task.last);
+    });
   }
 
   @override
